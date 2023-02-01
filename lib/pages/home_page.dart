@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:movie_app/widgets/see_more_text.dart';
+import 'package:movie_app/widgets/title_text_with_see_more_view.dart';
 
 import '../resources/colors.dart';
 import '../resources/dimens.dart';
 import '../resources/strings.dart';
 import '../viewitems/banner_view.dart';
 import '../viewitems/movie_view.dart';
+import '../viewitems/showcase_view.dart';
 import '../widgets/title_text.dart';
-
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -31,13 +33,41 @@ class HomePage extends StatelessWidget {
       ),
       body: Container(
         color: PRIMARY_COLOR,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            BannerSectionView(),
-            SizedBox(height: MARGIN_LARGE),
-            BestPopularMoviesAndSerialsSectionView()
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              BannerSectionView(),
+              SizedBox(height: MARGIN_LARGE),
+              BestPopularMoviesAndSerialsSectionView(),
+              SizedBox(height: MARGIN_LARGE),
+              HorizontalMovieListView(),
+              SizedBox(
+                height: MARGIN_LARGE,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: MARGIN_MEDIUM_2),
+                child: TitleTextWithSeeMoreView(
+                    SHOWCASES_TITLE, SHOWCASES_SEE_MORE),
+              ),
+              SizedBox(
+                height: MARGIN_MEDIUM_2,
+              ),
+              Container(
+                height: SHOWCASES_HEIGHT,
+                child: ListView(
+                  padding: EdgeInsets.only(left: MARGIN_MEDIUM_2),
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    ShowCaseView(),
+                    ShowCaseView(),
+                    ShowCaseView(),
+                  ],
+                ),
+              ),
+              SizedBox(height: MARGIN_LARGE,)
+            ],
+          ),
         ),
       ),
     );
@@ -95,6 +125,7 @@ class BannerSectionView extends StatelessWidget {
       height: MediaQuery.of(context).size.height / 3,
       child: PageView(
         children: const [
+          BannerView(),
           BannerView(),
           BannerView(),
         ],

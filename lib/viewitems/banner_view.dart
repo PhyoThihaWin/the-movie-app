@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:movie_app/resources/colors.dart';
 import 'package:movie_app/resources/dimens.dart';
 
+import '../widgets/play_button_view.dart';
+
 class BannerView extends StatelessWidget {
   const BannerView({Key? key}) : super(key: key);
 
@@ -28,20 +30,7 @@ class BannerView extends StatelessWidget {
   }
 }
 
-class PlayButtonView extends StatelessWidget {
-  const PlayButtonView({
-    Key? key,
-  }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return const Icon(
-      Icons.play_circle_fill,
-      color: BANNER_PLAY_BUTTON_COLOR,
-      size: BANNER_PLAY_BUTTON_SIZE,
-    );
-  }
-}
 
 class GradientView extends StatelessWidget {
   const GradientView({
