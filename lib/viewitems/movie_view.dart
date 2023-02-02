@@ -33,20 +33,18 @@ class MovieView extends StatelessWidget {
           ),
           Row(
             children: [
-              Text(
+              const Text(
                 "8.9",
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: TEXT_REGULAR,
                     fontWeight: FontWeight.bold),
               ),
-              SizedBox(
-                width: MARGIN_MEDIUM,
-              ),
+              const SizedBox(width: MARGIN_MEDIUM),
               RatingBar.builder(
                 initialRating: 5.0,
                 itemSize: MARGIN_MEDIUM_2,
-                itemBuilder: (context, index) => Icon(
+                itemBuilder: (context, index) => const Icon(
                   Icons.star,
                   color: Colors.amber,
                 ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movie_app/widgets/see_more_text.dart';
+import 'package:movie_app/viewitems/actor_view.dart';
 import 'package:movie_app/widgets/title_text_with_see_more_view.dart';
 
 import '../resources/colors.dart';
@@ -42,34 +42,80 @@ class HomePage extends StatelessWidget {
               BestPopularMoviesAndSerialsSectionView(),
               SizedBox(height: MARGIN_LARGE),
               HorizontalMovieListView(),
-              SizedBox(
-                height: MARGIN_LARGE,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: MARGIN_MEDIUM_2),
-                child: TitleTextWithSeeMoreView(
-                    SHOWCASES_TITLE, SHOWCASES_SEE_MORE),
-              ),
-              SizedBox(
-                height: MARGIN_MEDIUM_2,
-              ),
-              Container(
-                height: SHOWCASES_HEIGHT,
-                child: ListView(
-                  padding: EdgeInsets.only(left: MARGIN_MEDIUM_2),
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    ShowCaseView(),
-                    ShowCaseView(),
-                    ShowCaseView(),
-                  ],
-                ),
-              ),
-              SizedBox(height: MARGIN_LARGE,)
+              SizedBox(height: MARGIN_LARGE),
+              ShowcasesSection(),
+              SizedBox(height: MARGIN_LARGE),
+              BestActorSectionView(),
+              SizedBox(height: MARGIN_LARGE)
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class BestActorSectionView extends StatelessWidget {
+  const BestActorSectionView({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: MARGIN_MEDIUM_2),
+          child: TitleTextWithSeeMoreView(
+              BEST_ACTOR_TITLE, BEST_ACTOR_SEE_MORE),
+        ),
+        SizedBox(height: MARGIN_MEDIUM_2),
+        Container(
+          height: BEST_ACTOR_HEIGHT,
+          child: ListView(
+            padding: EdgeInsets.only(left: MARGIN_MEDIUM_2),
+            scrollDirection: Axis.horizontal,
+            children: [
+              ActorView(),
+              ActorView(),
+              ActorView(),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class ShowcasesSection extends StatelessWidget {
+  const ShowcasesSection({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: MARGIN_MEDIUM_2),
+          child: TitleTextWithSeeMoreView(SHOWCASES_TITLE, SHOWCASES_SEE_MORE),
+        ),
+        SizedBox(
+          height: MARGIN_MEDIUM_2,
+        ),
+        Container(
+          height: SHOWCASES_HEIGHT,
+          child: ListView(
+            padding: EdgeInsets.only(left: MARGIN_MEDIUM_2),
+            scrollDirection: Axis.horizontal,
+            children: [
+              ShowCaseView(),
+              ShowCaseView(),
+              ShowCaseView(),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

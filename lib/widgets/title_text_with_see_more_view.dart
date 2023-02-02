@@ -12,9 +12,9 @@ class TitleTextWithSeeMoreView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(children: [
-      TitleText("SHOWCASES"),
+      TitleText(titleText),
       Spacer(),
-      SeeMoreText("MORE SHOWCASES")
+      SeeMoreText(seeMoreText)
     ]);
   }
 }
