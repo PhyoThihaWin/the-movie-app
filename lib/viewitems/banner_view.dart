@@ -44,7 +44,7 @@ class GradientView extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [Colors.transparent, PRIMARY_COLOR],
+          colors: [Colors.transparent, HOME_SCREEN_BACKGROUND_COLOR],
         ),
       ),
     );

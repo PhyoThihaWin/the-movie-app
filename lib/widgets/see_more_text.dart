@@ -2,17 +2,19 @@ import 'package:flutter/material.dart';
 
 class SeeMoreText extends StatelessWidget {
   final String text;
+  final Color textColor;
 
-  SeeMoreText(this.text);
+  SeeMoreText(this.text, {this.textColor = Colors.white});
 
   @override
   Widget build(BuildContext context) {
-    return const Text(
-      "MORE SHOWCASES",
+    return Text(
+      text,
       style: TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-          decoration: TextDecoration.underline),
+        color: textColor,
+        fontWeight: FontWeight.bold,
+        decoration: TextDecoration.underline,
+      ),
     );
   }
 }
