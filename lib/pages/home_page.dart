@@ -1,6 +1,7 @@
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_app/viewitems/actor_view.dart';
+import 'package:movie_app/widgets/actors_and_creators_section_view.dart';
 import 'package:movie_app/widgets/see_more_text.dart';
 import 'package:movie_app/widgets/title_text_with_see_more_view.dart';
 
@@ -13,7 +14,14 @@ import '../viewitems/showcase_view.dart';
 import '../widgets/title_text.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+  List<String> genreList = [
+    "Action",
+    "Adventrue",
+    "Horror",
+    "Comedy",
+    "Thriller",
+    "Drama"
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -39,22 +47,65 @@ class HomePage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const BannerSectionView(),
-              const SizedBox(height: MARGIN_LARGE),
-              const BestPopularMoviesAndSerialsSectionView(),
-              const SizedBox(height: MARGIN_LARGE),
+              BannerSectionView(),
+              SizedBox(height: MARGIN_LARGE),
+              BestPopularMoviesAndSerialsSectionView(),
+              SizedBox(height: MARGIN_LARGE),
               CheckMovieShowtimesView(),
-              const SizedBox(height: MARGIN_LARGE),
-              const HorizontalMovieListView(),
-              const SizedBox(height: MARGIN_LARGE),
-              const ShowcasesSection(),
-              const SizedBox(height: MARGIN_LARGE),
-              const BestActorSectionView(),
-              const SizedBox(height: MARGIN_LARGE)
+              SizedBox(height: MARGIN_LARGE),
+              GenreSectionView(genreList),
+              SizedBox(height: MARGIN_LARGE),
+              ShowcasesSection(),
+              SizedBox(height: MARGIN_LARGE),
+              ActorsAndCreatorsSectionView(
+                  BEST_ACTOR_TITLE, BEST_ACTOR_SEE_MORE),
+              SizedBox(height: MARGIN_LARGE)
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class GenreSectionView extends StatelessWidget {
+  final List<String> genreList;
+
+  GenreSectionView(this.genreList);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: MARGIN_MEDIUM_2,
+          ),
+          child: DefaultTabController(
+            length: genreList.length,
+            child: TabBar(
+              isScrollable: true,
+              indicatorColor: BANNER_PLAY_BUTTON_COLOR,
+              unselectedLabelColor: HOME_SCREEN_LIST_TITLE_COLOR,
+              tabs: genreList
+                  .map(
+                    (genre) => Tab(
+                      child: Text(genre),
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
+        ),
+        Container(
+          color: PRIMARY_COLOR,
+          padding: EdgeInsets.only(
+            top: MARGIN_MEDIUM_2,
+            bottom: MARGIN_LARGE,
+          ),
+          child: HorizontalMovieListView(),
+        ),
+      ],
     );
   }
 }
@@ -99,38 +150,6 @@ class CheckMovieShowtimesView extends StatelessWidget {
           )
         ],
       ),
-    );
-  }
-}
-
-class BestActorSectionView extends StatelessWidget {
-  const BestActorSectionView({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: MARGIN_MEDIUM_2),
-          child:
-              TitleTextWithSeeMoreView(BEST_ACTOR_TITLE, BEST_ACTOR_SEE_MORE),
-        ),
-        const SizedBox(height: MARGIN_MEDIUM_2),
-        Container(
-          height: BEST_ACTOR_HEIGHT,
-          child: ListView(
-            padding: const EdgeInsets.only(left: MARGIN_MEDIUM_2),
-            scrollDirection: Axis.horizontal,
-            children: [
-              const ActorView(),
-              const ActorView(),
-              const ActorView(),
-            ],
-          ),
-        ),
-      ],
     );
   }
 }
