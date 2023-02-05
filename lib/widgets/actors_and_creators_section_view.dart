@@ -9,7 +9,7 @@ import '../viewitems/actor_view.dart';
 class ActorsAndCreatorsSectionView extends StatelessWidget {
   final String titleText;
   final String seeMoreText;
-  bool seeMoreButtonVisibility;
+  final bool seeMoreButtonVisibility;
 
   ActorsAndCreatorsSectionView(this.titleText, this.seeMoreText,
       {this.seeMoreButtonVisibility = true});

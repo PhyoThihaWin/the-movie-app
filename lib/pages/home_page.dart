@@ -1,6 +1,6 @@
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
-import 'package:movie_app/viewitems/actor_view.dart';
+import 'package:movie_app/pages/movie_details_page.dart';
 import 'package:movie_app/widgets/actors_and_creators_section_view.dart';
 import 'package:movie_app/widgets/see_more_text.dart';
 import 'package:movie_app/widgets/title_text_with_see_more_view.dart';
@@ -49,11 +49,16 @@ class HomePage extends StatelessWidget {
             children: [
               BannerSectionView(),
               SizedBox(height: MARGIN_LARGE),
-              BestPopularMoviesAndSerialsSectionView(),
+              BestPopularMoviesAndSerialsSectionView(
+                () => _navigateToMovieDetailScreen(context),
+              ),
               SizedBox(height: MARGIN_LARGE),
               CheckMovieShowtimesView(),
               SizedBox(height: MARGIN_LARGE),
-              GenreSectionView(genreList),
+              GenreSectionView(
+                () => _navigateToMovieDetailScreen(context),
+                genreList: genreList,
+              ),
               SizedBox(height: MARGIN_LARGE),
               ShowcasesSection(),
               SizedBox(height: MARGIN_LARGE),
@@ -66,12 +71,22 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
+
+  Future<dynamic> _navigateToMovieDetailScreen(BuildContext context) {
+    return Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MovieDetailsPage(),
+        ));
+  }
+
 }
 
 class GenreSectionView extends StatelessWidget {
   final List<String> genreList;
+  final Function onTapMovie;
 
-  GenreSectionView(this.genreList);
+  GenreSectionView(this.onTapMovie, {required this.genreList});
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +118,7 @@ class GenreSectionView extends StatelessWidget {
             top: MARGIN_MEDIUM_2,
             bottom: MARGIN_LARGE,
           ),
-          child: HorizontalMovieListView(),
+          child: HorizontalMovieListView(onTapMovie),
         ),
       ],
     );
@@ -188,9 +203,9 @@ class ShowcasesSection extends StatelessWidget {
 }
 
 class BestPopularMoviesAndSerialsSectionView extends StatelessWidget {
-  const BestPopularMoviesAndSerialsSectionView({
-    Key? key,
-  }) : super(key: key);
+  final Function onTapMovie;
+
+  BestPopularMoviesAndSerialsSectionView(this.onTapMovie);
 
   @override
   Widget build(BuildContext context) {
@@ -204,14 +219,16 @@ class BestPopularMoviesAndSerialsSectionView extends StatelessWidget {
         const SizedBox(
           height: MARGIN_MEDIUM_2,
         ),
-        const HorizontalMovieListView(),
+        HorizontalMovieListView(onTapMovie),
       ],
     );
   }
 }
 
 class HorizontalMovieListView extends StatelessWidget {
-  const HorizontalMovieListView({Key? key}) : super(key: key);
+  final Function onTapMovie;
+
+  HorizontalMovieListView(this.onTapMovie);
 
   @override
   Widget build(BuildContext context) {
@@ -222,7 +239,7 @@ class HorizontalMovieListView extends StatelessWidget {
         padding: const EdgeInsets.only(left: MARGIN_MEDIUM_2),
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
-          return const MovieView();
+          return MovieView(onTapMovie);
         },
       ),
     );

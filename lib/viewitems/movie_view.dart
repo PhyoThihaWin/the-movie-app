@@ -4,7 +4,9 @@ import 'package:movie_app/widgets/rating_view.dart';
 import '../resources/dimens.dart';
 
 class MovieView extends StatelessWidget {
-  const MovieView({Key? key}) : super(key: key);
+  final Function onTapMovie;
+
+  MovieView(this.onTapMovie);
 
   @override
   Widget build(BuildContext context) {
@@ -14,10 +16,13 @@ class MovieView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.network(
-            "https://fictionhorizon.com/wp-content/uploads/2021/09/Wolverine-Movies-in-Order-All-X-Logan-Movies-Order-09.jpg",
-            height: 200,
-            fit: BoxFit.cover,
+          GestureDetector(
+            onTap: () => onTapMovie(),
+            child: Image.network(
+              "https://fictionhorizon.com/wp-content/uploads/2021/09/Wolverine-Movies-in-Order-All-X-Logan-Movies-Order-09.jpg",
+              height: 200,
+              fit: BoxFit.cover,
+            ),
           ),
           const SizedBox(
             height: MARGIN_MEDIUM,
