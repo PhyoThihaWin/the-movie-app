@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:movie_app/data/vos/movie_vo.dart';
+import 'package:movie_app/network/api_constants.dart';
 import 'package:movie_app/resources/dimens.dart';
 import 'package:movie_app/widgets/play_button_view.dart';
 
 import '../widgets/title_text.dart';
 
 class ShowCaseView extends StatelessWidget {
-  const ShowCaseView({Key? key}) : super(key: key);
+  final MovieVO? movie;
+
+  ShowCaseView({required this.movie});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +20,7 @@ class ShowCaseView extends StatelessWidget {
         children: [
           Positioned.fill(
             child: Image.network(
-              "https://fictionhorizon.com/wp-content/uploads/2021/09/Wolverine-Movies-in-Order-All-X-Logan-Movies-Order-09.jpg",
+              "$IMAGE_BASE_URL${movie?.posterPath ?? ""}",
               fit: BoxFit.cover,
             ),
           ),
@@ -33,7 +37,7 @@ class ShowCaseView extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "Passenger",
+                    movie?.title ?? "",
                     style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,

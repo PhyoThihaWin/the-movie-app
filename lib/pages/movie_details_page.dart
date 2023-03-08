@@ -36,6 +36,7 @@ class MovieDetailsPage extends StatelessWidget {
                     MOVIE_DETAIL_SCREEN_ACOTRS_TITLE,
                     "",
                     seeMoreButtonVisibility: false,
+                    actors: [],
                   ),
                   Container(
                     margin: EdgeInsets.symmetric(
@@ -45,6 +46,7 @@ class MovieDetailsPage extends StatelessWidget {
                   ActorsAndCreatorsSectionView(
                     MOVIE_DETAIL_SCREEN_CREATORS_TITLE,
                     MOVIE_DETAIL_SCREEN_CREATORS_SEEMORE,
+                    actors: [],
                   )
                 ],
               ),
@@ -318,7 +320,6 @@ class MovieDetallsSliverAppBarView extends StatelessWidget {
       title: SliverAppBarTitle(child: Text("The Wolverine")),
       centerTitle: true,
       pinned: true,
-
       backgroundColor: PRIMARY_COLOR,
       automaticallyImplyLeading: false,
       expandedHeight: MOVIE_DETAIL_SCREEN_SLIVER_APPBAR_HEIGHT,

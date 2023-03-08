@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:movie_app/network/api_constants.dart';
 import 'package:movie_app/widgets/rating_view.dart';
+
+import '../data/vos/movie_vo.dart';
 import '../resources/dimens.dart';
 
 class MovieView extends StatelessWidget {
   final Function onTapMovie;
+  final MovieVO? movie;
 
-  MovieView(this.onTapMovie);
+  MovieView({required this.onTapMovie, required this.movie});
 
   @override
   Widget build(BuildContext context) {
@@ -19,17 +22,17 @@ class MovieView extends StatelessWidget {
           GestureDetector(
             onTap: () => onTapMovie(),
             child: Image.network(
-              "https://fictionhorizon.com/wp-content/uploads/2021/09/Wolverine-Movies-in-Order-All-X-Logan-Movies-Order-09.jpg",
-              height: 200,
+              "$IMAGE_BASE_URL${movie?.posterPath ?? ""}",
+              height: 180,
               fit: BoxFit.cover,
             ),
           ),
           const SizedBox(
             height: MARGIN_MEDIUM,
           ),
-          const Text(
-            "West World",
-            style: TextStyle(
+          Text(
+            movie?.title ?? "",
+            style: const TextStyle(
                 color: Colors.white,
                 fontSize: TEXT_REGULAR_2X,
                 fontWeight: FontWeight.w500),

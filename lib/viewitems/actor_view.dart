@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:movie_app/data/vos/actor_vo.dart';
+import 'package:movie_app/network/api_constants.dart';
 
 import '../resources/colors.dart';
 import '../resources/dimens.dart';
 
 class ActorView extends StatelessWidget {
-  const ActorView({Key? key}) : super(key: key);
+  final ActorVO? actor;
+
+  ActorView({required this.actor});
 
   @override
   Widget build(BuildContext context) {
@@ -12,9 +16,11 @@ class ActorView extends StatelessWidget {
       margin: EdgeInsets.only(right: MARGIN_MEDIUM),
       width: MOVIE_LIST_ITEM_WIDTH,
       child: Stack(
-        children: const [
+        children: [
           Positioned.fill(
-            child: ActorImageView(),
+            child: ActorImageView(
+              imageUrl: actor?.profilePath ?? "",
+            ),
           ),
           Padding(
             padding: EdgeInsets.all(MARGIN_MEDIUM),
@@ -25,7 +31,9 @@ class ActorView extends StatelessWidget {
           ),
           Align(
             alignment: Alignment.bottomCenter,
-            child: ActorNameAndLikeView(),
+            child: ActorNameAndLikeView(
+              actorName: actor?.name ?? "",
+            ),
           )
         ],
       ),
@@ -34,14 +42,14 @@ class ActorView extends StatelessWidget {
 }
 
 class ActorImageView extends StatelessWidget {
-  const ActorImageView({
-    Key? key,
-  }) : super(key: key);
+  final String imageUrl;
+
+  ActorImageView({required this.imageUrl});
 
   @override
   Widget build(BuildContext context) {
     return Image.network(
-      "https://celebhealthmagazine.com/wp-content/uploads/2022/09/Leonardo-DiCaprio.jpg",
+      "$IMAGE_BASE_URL$imageUrl",
       fit: BoxFit.cover,
     );
   }
@@ -62,9 +70,9 @@ class FavouriteButtonView extends StatelessWidget {
 }
 
 class ActorNameAndLikeView extends StatelessWidget {
-  const ActorNameAndLikeView({
-    Key? key,
-  }) : super(key: key);
+  final String actorName;
+
+  ActorNameAndLikeView({required this.actorName});
 
   @override
   Widget build(BuildContext context) {
@@ -77,8 +85,8 @@ class ActorNameAndLikeView extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Leonado DiCaprio",
+          Text(
+            actorName,
             style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w600,
