@@ -24,8 +24,37 @@ class ActorVO {
   @JsonKey(name: "profile_path")
   String? profilePath;
 
-  ActorVO(this.adult, this.id, this.knownFor, this.popularity, this.name,
-      this.profilePath);
+  @JsonKey(name: "known_for_department")
+  String? knownForDepartment;
+
+  @JsonKey(name: "original_name")
+  String? originalName;
+
+  @JsonKey(name: "cast_id")
+  int? castId;
+
+  @JsonKey(name: "character")
+  String? character;
+
+  @JsonKey(name: "credit_id")
+  String? creditId;
+
+  @JsonKey(name: "order")
+  int? order;
+
+  ActorVO(
+      this.adult,
+      this.id,
+      this.knownFor,
+      this.popularity,
+      this.name,
+      this.profilePath,
+      this.knownForDepartment,
+      this.originalName,
+      this.castId,
+      this.character,
+      this.creditId,
+      this.order);
 
   factory ActorVO.fromJson(Map<String, dynamic> json) =>
       _$ActorVOFromJson(json);

@@ -59,13 +59,7 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         this.genres = list;
       });
-      movieModel.getMoviesByGenre(genres?.first.id ?? 1).then((list) {
-        setState(() {
-          moviesByGenres = list;
-        });
-      }).catchError((error) {
-        debugPrint(error.toString());
-      });
+      _getMoviesByGenres(genres?.first.id ?? 0);
     }).catchError((error) {
       debugPrint(error.toString());
     });
@@ -89,6 +83,16 @@ class _HomePageState extends State<HomePage> {
     });
 
     super.initState();
+  }
+
+  void _getMoviesByGenres(int genreId) {
+    movieModel.getMoviesByGenre(genreId).then((list) {
+      setState(() {
+        moviesByGenres = list;
+      });
+    }).catchError((error) {
+      debugPrint(error.toString());
+    });
   }
 
   @override
@@ -117,22 +121,36 @@ class _HomePageState extends State<HomePage> {
             children: [
               BannerSectionView(
                 movieList: popularMovies,
+                onTapMovie: (movieId) =>
+                    _navigateToMovieDetailScreen(context, movieId),
               ),
               SizedBox(height: MARGIN_LARGE),
               BestPopularMoviesAndSerialsSectionView(
-                onTapMovie: () => _navigateToMovieDetailScreen(context),
+                onTapMovie: (movieId) =>
+                    _navigateToMovieDetailScreen(context, movieId),
                 getNowPlayingMovies: getNowPlayingMovies,
               ),
               SizedBox(height: MARGIN_LARGE),
               CheckMovieShowtimesView(),
               SizedBox(height: MARGIN_LARGE),
               GenreSectionView(
-                onTapMovie: () => _navigateToMovieDetailScreen(context),
+                onTapMovie: (movieId) =>
+                    _navigateToMovieDetailScreen(context, movieId),
                 genreList: genres,
                 movieList: moviesByGenres,
+                onChooseGenre: (genreId) {
+                  if (genreId != null) {
+                    debugPrint(genreId.toString());
+                    _getMoviesByGenres(genreId);
+                  }
+                },
               ),
               SizedBox(height: MARGIN_LARGE),
-              ShowcasesSection(topRatedMovies: topRatedMovies),
+              ShowcasesSection(
+                topRatedMovies: topRatedMovies,
+                onTapMovie: (movieId) =>
+                    _navigateToMovieDetailScreen(context, movieId),
+              ),
               SizedBox(height: MARGIN_LARGE),
               ActorsAndCreatorsSectionView(
                   BEST_ACTOR_TITLE, BEST_ACTOR_SEE_MORE,
@@ -145,24 +163,30 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Future<dynamic> _navigateToMovieDetailScreen(BuildContext context) {
-    return Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => MovieDetailsPage(),
-        ));
+  void _navigateToMovieDetailScreen(BuildContext context, int? movieId) {
+    if (movieId != null) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MovieDetailsPage(
+              movieId: movieId,
+            ),
+          ));
+    }
   }
 }
 
 class GenreSectionView extends StatelessWidget {
   final List<GenreVO>? genreList;
   final List<MovieVO>? movieList;
-  final Function onTapMovie;
+  final Function(int?) onTapMovie;
+  final Function(int?) onChooseGenre;
 
   GenreSectionView(
       {required this.onTapMovie,
       required this.genreList,
-      required this.movieList});
+      required this.movieList,
+      required this.onChooseGenre});
 
   @override
   Widget build(BuildContext context) {
@@ -181,11 +205,14 @@ class GenreSectionView extends StatelessWidget {
               tabs: genreList
                       ?.map(
                         (genre) => Tab(
-                          child: Text(genre?.name ?? ""),
+                          child: Text(genre.name ?? ""),
                         ),
                       )
                       .toList() ??
                   [],
+              onTap: (index) {
+                onChooseGenre(genreList?[index].id);
+              },
             ),
           ),
         ),
@@ -251,8 +278,9 @@ class CheckMovieShowtimesView extends StatelessWidget {
 
 class ShowcasesSection extends StatelessWidget {
   final List<MovieVO>? topRatedMovies;
+  final Function(int?) onTapMovie;
 
-  ShowcasesSection({required this.topRatedMovies});
+  ShowcasesSection({required this.topRatedMovies, required this.onTapMovie});
 
   @override
   Widget build(BuildContext context) {
@@ -271,7 +299,10 @@ class ShowcasesSection extends StatelessWidget {
             padding: const EdgeInsets.only(left: MARGIN_MEDIUM_2),
             scrollDirection: Axis.horizontal,
             children: topRatedMovies
-                    ?.map((movie) => ShowCaseView(movie: movie))
+                    ?.map((movie) => ShowCaseView(
+                          movie: movie,
+                          onTapMovie: onTapMovie,
+                        ))
                     .toList() ??
                 [],
           ),
@@ -282,7 +313,7 @@ class ShowcasesSection extends StatelessWidget {
 }
 
 class BestPopularMoviesAndSerialsSectionView extends StatelessWidget {
-  final Function onTapMovie;
+  final Function(int?) onTapMovie;
   final List<MovieVO>? getNowPlayingMovies;
 
   BestPopularMoviesAndSerialsSectionView(
@@ -310,7 +341,7 @@ class BestPopularMoviesAndSerialsSectionView extends StatelessWidget {
 }
 
 class HorizontalMovieListView extends StatelessWidget {
-  final Function onTapMovie;
+  final Function(int?) onTapMovie;
   final List<MovieVO>? movieList;
 
   HorizontalMovieListView({required this.onTapMovie, required this.movieList});
@@ -336,8 +367,9 @@ class HorizontalMovieListView extends StatelessWidget {
 
 class BannerSectionView extends StatefulWidget {
   final List<MovieVO>? movieList;
+  final Function(int?) onTapMovie;
 
-  BannerSectionView({required this.movieList});
+  BannerSectionView({required this.onTapMovie, required this.movieList});
 
   @override
   State<BannerSectionView> createState() => _BannerSectionViewState();
@@ -361,6 +393,7 @@ class _BannerSectionViewState extends State<BannerSectionView> {
             children: widget.movieList
                     ?.map((movie) => BannerView(
                           movie: movie,
+                          onTapMovie: widget.onTapMovie,
                         ))
                     .toList() ??
                 [],

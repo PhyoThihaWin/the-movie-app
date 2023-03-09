@@ -6,7 +6,7 @@ import '../data/vos/movie_vo.dart';
 import '../resources/dimens.dart';
 
 class MovieView extends StatelessWidget {
-  final Function onTapMovie;
+  final Function(int?) onTapMovie;
   final MovieVO? movie;
 
   MovieView({required this.onTapMovie, required this.movie});
@@ -20,7 +20,7 @@ class MovieView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           GestureDetector(
-            onTap: () => onTapMovie(),
+            onTap: () => onTapMovie(movie?.id),
             child: Image.network(
               "$IMAGE_BASE_URL${movie?.posterPath ?? ""}",
               height: 180,

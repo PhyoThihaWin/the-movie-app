@@ -8,32 +8,38 @@ import '../widgets/play_button_view.dart';
 
 class BannerView extends StatelessWidget {
   final MovieVO? movie;
+  final Function(int?) onTapMovie;
 
-  BannerView({this.movie});
+  BannerView({required this.onTapMovie, required this.movie});
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Positioned.fill(
-          child: BannerImageView(
-            imageUrl: movie?.posterPath ?? "",
+    return GestureDetector(
+      onTap: () {
+        onTapMovie(movie?.id ?? 0);
+      },
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: BannerImageView(
+              imageUrl: movie?.posterPath ?? "",
+            ),
           ),
-        ),
-        Positioned.fill(
-          child: GradientView(),
-        ),
-        Align(
-          alignment: Alignment.bottomLeft,
-          child: BannerTitleView(
-            title: movie?.title ?? "",
+          Positioned.fill(
+            child: GradientView(),
           ),
-        ),
-        const Align(
-          alignment: Alignment.center,
-          child: PlayButtonView(),
-        )
-      ],
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: BannerTitleView(
+              title: movie?.title ?? "",
+            ),
+          ),
+          const Align(
+            alignment: Alignment.center,
+            child: PlayButtonView(),
+          )
+        ],
+      ),
     );
   }
 }
