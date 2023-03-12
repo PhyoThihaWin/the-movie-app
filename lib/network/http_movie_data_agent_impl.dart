@@ -56,4 +56,16 @@ class HttpMovieDataAgentImpl implements MovieDataAgent {
     // TODO: implement getTopRatedMovies
     throw UnimplementedError();
   }
+
+  @override
+  Future<List<List<ActorVO>?>> getCreditsByMovie(int movieId) {
+    // TODO: implement getCreditsByMovie
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<MovieVO?> getMovieDetails(int movieId) {
+    // TODO: implement getMovieDetails
+    throw UnimplementedError();
+  }
 }
