@@ -88,7 +88,7 @@ class _HomePageState extends State<HomePage> {
   void _getMoviesByGenres(int genreId) {
     movieModel.getMoviesByGenre(genreId).then((list) {
       setState(() {
-        moviesByGenres = list;
+        moviesByGenres = list.where((item) => item.posterPath != null).toList();
       });
     }).catchError((error) {
       debugPrint(error.toString());
@@ -350,7 +350,7 @@ class HorizontalMovieListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: MOVIE_LIST_HEIGHT,
-      child: movieList != null
+      child: movieList?.isNotEmpty ?? false
           ? ListView.builder(
               itemCount: movieList?.length ?? 0,
               padding: const EdgeInsets.only(left: MARGIN_MEDIUM_2),

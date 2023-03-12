@@ -32,6 +32,8 @@ class MovieView extends StatelessWidget {
           ),
           Text(
             movie?.title ?? "",
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
             style: const TextStyle(
                 color: Colors.white,
                 fontSize: TEXT_REGULAR_2X,
