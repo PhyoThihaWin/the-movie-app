@@ -45,8 +45,26 @@ class _HomePageState extends State<HomePage> {
       debugPrint(error.toString());
     });
 
+    /// Now Playing Movies From Db
+    movieModel.getNowPlayingMoviesFromDatabase().then((list) {
+      setState(() {
+        getNowPlayingMovies = list;
+      });
+    }).catchError((error) {
+      debugPrint(error.toString());
+    });
+
     /// Popular Movies
     movieModel.getNowPlayingMovies(1).then((list) {
+      setState(() {
+        popularMovies = list.sublist(0, list.length ~/ 2.8);
+      });
+    }).catchError((error) {
+      debugPrint(error.toString());
+    });
+
+    /// Popular Movies From Db
+    movieModel.getNowPlayingMoviesFromDatabase().then((list) {
       setState(() {
         popularMovies = list.sublist(0, list.length ~/ 2.8);
       });
@@ -64,6 +82,16 @@ class _HomePageState extends State<HomePage> {
       debugPrint(error.toString());
     });
 
+    /// Genres From Db
+    movieModel.getGenresFromDatabase().then((list) {
+      setState(() {
+        this.genres = list;
+      });
+      _getMoviesByGenres(genres?.first.id ?? 0);
+    }).catchError((error) {
+      debugPrint(error.toString());
+    });
+
     /// Top Rated Movies
     movieModel.getTopRatedMovies(1).then((list) {
       setState(() {
@@ -73,8 +101,26 @@ class _HomePageState extends State<HomePage> {
       debugPrint(error.toString());
     });
 
-    /// Actors
+    /// Top Rated Movies From Db
+    movieModel.getTopRatedMoviesFromDatabase().then((list) {
+      setState(() {
+        topRatedMovies = list;
+      });
+    }).catchError((error) {
+      debugPrint(error.toString());
+    });
+
+    /// Actors From Db
     movieModel.getActors(1).then((list) {
+      setState(() {
+        actors = list;
+      });
+    }).catchError((error) {
+      debugPrint(error.toString());
+    });
+
+    /// Actors From Db
+    movieModel.getAllActorsFromDatabase().then((list) {
       setState(() {
         actors = list;
       });

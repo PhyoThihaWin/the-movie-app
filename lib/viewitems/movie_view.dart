@@ -20,7 +20,10 @@ class MovieView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           GestureDetector(
-            onTap: () => onTapMovie(movie?.id),
+            onTap: () {
+              debugPrint("${movie?.id ?? "No id!!"}");
+              onTapMovie(movie?.id);
+            },
             child: Image.network(
               "$IMAGE_BASE_URL${movie?.posterPath ?? ""}",
               height: 180,

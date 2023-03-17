@@ -78,18 +78,19 @@ class RetrofitMovieDataAgentImpl implements MovieDataAgent {
   }
 
   @override
-  Future<List<List<ActorVO>?>> getCreditsByMovie(int movieId) {
+  Future<List<List<ActorVO>>> getCreditsByMovie(int movieId) {
     return movieApi
         .getCreditsByMovie(movieId, API_KEY)
         .asStream()
-        .map((getCreditsByMovieResponse) =>
-            [getCreditsByMovieResponse.cast, getCreditsByMovieResponse.crew])
+        .map((getCreditsByMovieResponse) => [
+              getCreditsByMovieResponse.cast ?? [],
+              getCreditsByMovieResponse.crew ?? []
+            ])
         .first;
   }
 
   @override
-  Future<MovieVO?> getMovieDetails(int movieId) {
+  Future<MovieVO> getMovieDetails(int movieId) {
     return movieApi.getMovieDetails(API_KEY, LANGUAGE_ENUS, movieId);
   }
-
 }

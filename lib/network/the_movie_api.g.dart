@@ -205,7 +205,7 @@ class _TheMovieApi implements TheMovieApi {
   }
 
   @override
-  Future<MovieVO?> getMovieDetails(
+  Future<MovieVO> getMovieDetails(
     apiKey,
     language,
     movieId,
@@ -218,7 +218,7 @@ class _TheMovieApi implements TheMovieApi {
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     final _result =
-        await _dio.fetch<Map<String, dynamic>?>(_setStreamType<MovieVO>(Options(
+        await _dio.fetch<Map<String, dynamic>>(_setStreamType<MovieVO>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -230,7 +230,7 @@ class _TheMovieApi implements TheMovieApi {
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = _result.data == null ? null : MovieVO.fromJson(_result.data!);
+    final value = MovieVO.fromJson(_result.data!);
     return value;
   }
 

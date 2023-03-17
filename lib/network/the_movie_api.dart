@@ -56,7 +56,7 @@ abstract class TheMovieApi {
   );
 
   @GET("$ENDPOINT_GET_MOVIE_DETAILS/{movie_id}")
-  Future<MovieVO?> getMovieDetails(
+  Future<MovieVO> getMovieDetails(
     @Query(PARAM_API_KEY) String apiKey,
     @Query(PARAM_LANGUAGE) String language,
     @Path("movie_id") int movieId,

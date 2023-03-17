@@ -34,12 +34,21 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
 
   @override
   void initState() {
+    /// Movie Detail
     _movieModel.getMovieDetails(widget.movieId).then((movieDetails) {
       setState(() {
         this.movieDetails = movieDetails;
       });
     }).catchError((error) => debugPrint(error.toString()));
 
+    ///  Movie Detail from Db
+    _movieModel.getMovieDetailsFromDatabase(widget.movieId).then((movieDetails) {
+      setState(() {
+        this.movieDetails = movieDetails;
+      });
+    }).catchError((error) => debugPrint(error.toString()));
+
+    /// Credits
     _movieModel.getCreditsByMovie(widget.movieId).then((castAndCrew) {
       setState(() {
         this.cast = castAndCrew.first;
