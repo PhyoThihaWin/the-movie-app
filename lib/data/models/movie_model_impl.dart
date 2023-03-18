@@ -108,7 +108,7 @@ class MovieModelImpl extends MovieModel {
   }
 
   @override
-  Future<MovieVO> getMovieDetailsFromDatabase(int movieId) {
+  Future<MovieVO?> getMovieDetailsFromDatabase(int movieId) {
     return Future.value(movieDao.getSingleMovie(movieId));
   }
 

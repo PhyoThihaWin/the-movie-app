@@ -32,5 +32,5 @@ abstract class MovieModel {
 
   Future<List<ActorVO>> getAllActorsFromDatabase();
 
-  Future<MovieVO> getMovieDetailsFromDatabase(int movieId);
+  Future<MovieVO?> getMovieDetailsFromDatabase(int movieId);
 }

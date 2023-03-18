@@ -42,10 +42,14 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
     }).catchError((error) => debugPrint(error.toString()));
 
     ///  Movie Detail from Db
-    _movieModel.getMovieDetailsFromDatabase(widget.movieId).then((movieDetails) {
-      setState(() {
-        this.movieDetails = movieDetails;
-      });
+    _movieModel
+        .getMovieDetailsFromDatabase(widget.movieId)
+        .then((movieDetails) {
+      if (movieDetails != null) {
+        setState(() {
+          this.movieDetails = movieDetails;
+        });
+      }
     }).catchError((error) => debugPrint(error.toString()));
 
     /// Credits
