@@ -37,38 +37,38 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     /// Now Playing Movies
-    movieModel.getNowPlayingMovies(1).then((list) {
-      setState(() {
-        getNowPlayingMovies = list;
-      });
-    }).catchError((error) {
-      debugPrint(error.toString());
-    });
+    // movieModel.getNowPlayingMovies(1).then((list) {
+    //   setState(() {
+    //     getNowPlayingMovies = list;
+    //   });
+    // }).catchError((error) {
+    //   debugPrint(error.toString());
+    // });
 
     /// Now Playing Movies From Db
-    movieModel.getNowPlayingMoviesFromDatabase().then((list) {
+    movieModel.getNowPlayingMoviesFromDatabase().listen((list) {
       setState(() {
         getNowPlayingMovies = list;
       });
-    }).catchError((error) {
+    }).onError((error) {
       debugPrint(error.toString());
     });
 
     /// Popular Movies
-    movieModel.getNowPlayingMovies(1).then((list) {
-      setState(() {
-        popularMovies = list.sublist(0, list.length ~/ 2.8);
-      });
-    }).catchError((error) {
-      debugPrint(error.toString());
-    });
+    // movieModel.getNowPlayingMovies(1).then((list) {
+    //   setState(() {
+    //     popularMovies = list.sublist(0, list.length ~/ 2.8);
+    //   });
+    // }).catchError((error) {
+    //   debugPrint(error.toString());
+    // });
 
     /// Popular Movies From Db
-    movieModel.getNowPlayingMoviesFromDatabase().then((list) {
+    movieModel.getNowPlayingMoviesFromDatabase().listen((list) {
       setState(() {
         popularMovies = list.sublist(0, list.length ~/ 2.8);
       });
-    }).catchError((error) {
+    }).onError((error) {
       debugPrint(error.toString());
     });
 
@@ -93,20 +93,20 @@ class _HomePageState extends State<HomePage> {
     });
 
     /// Top Rated Movies
-    movieModel.getTopRatedMovies(1).then((list) {
-      setState(() {
-        topRatedMovies = list;
-      });
-    }).catchError((error) {
-      debugPrint(error.toString());
-    });
+    // movieModel.getTopRatedMovies(1).then((list) {
+    //   setState(() {
+    //     topRatedMovies = list;
+    //   });
+    // }).catchError((error) {
+    //   debugPrint(error.toString());
+    // });
 
     /// Top Rated Movies From Db
-    movieModel.getTopRatedMoviesFromDatabase().then((list) {
+    movieModel.getTopRatedMoviesFromDatabase().listen((list) {
       setState(() {
         topRatedMovies = list;
       });
-    }).catchError((error) {
+    }).onError((error) {
       debugPrint(error.toString());
     });
 
