@@ -1,9 +1,10 @@
 import 'package:movie_app/data/vos/movie_vo.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 import '../vos/actor_vo.dart';
 import '../vos/genre_vo.dart';
 
-abstract class MovieModel {
+abstract class MovieModel extends Model {
   /// Network
   void getNowPlayingMovies(int page);
 
@@ -11,26 +12,26 @@ abstract class MovieModel {
 
   void getTopRatedMovies(int page);
 
-  Future<List<GenreVO>> getGenres();
+  void getGenres();
 
-  Future<List<MovieVO>> getMoviesByGenre(int genreId);
+  void getMoviesByGenre(int genreId);
 
-  Future<List<ActorVO>> getActors(int page);
+  void getActors(int page);
 
-  Future<MovieVO?> getMovieDetails(int movieId);
+  void getMovieDetails(int movieId);
 
-  Future<List<List<ActorVO>?>> getCreditsByMovie(int movieId);
+  void getCreditsByMovie(int movieId);
 
   /// Database
-  Stream<List<MovieVO>> getNowPlayingMoviesFromDatabase();
+  void getNowPlayingMoviesFromDatabase();
 
-  Stream<List<MovieVO>> getPopularMoviesFromDatabase();
+  void getPopularMoviesFromDatabase();
 
-  Stream<List<MovieVO>> getTopRatedMoviesFromDatabase();
+  void getTopRatedMoviesFromDatabase();
 
-  Future<List<GenreVO>> getGenresFromDatabase();
+  void getGenresFromDatabase();
 
-  Future<List<ActorVO>> getAllActorsFromDatabase();
+  void getAllActorsFromDatabase();
 
-  Future<MovieVO?> getMovieDetailsFromDatabase(int movieId);
+  void getMovieDetailsFromDatabase(int movieId);
 }
