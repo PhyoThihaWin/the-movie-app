@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movie_app/blocs/movie_details_bloc.dart';
+import 'package:movie_app/data/vos/actor_vo.dart';
 import 'package:movie_app/network/api_constants.dart';
 import 'package:movie_app/resources/colors.dart';
 import 'package:movie_app/resources/dimens.dart';
@@ -23,15 +24,16 @@ class MovieDetailsPage extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => MovieDetailsBloc(movieId),
       child: Scaffold(
-        body: Consumer<MovieDetailsBloc>(
-          builder: (context, bloc, child) {
+        body: Selector<MovieDetailsBloc, MovieVO?>(
+          selector: (context, bloc) => bloc.movieDetails,
+          builder: (context, movieDetails, child) {
             return Container(
               color: HOME_SCREEN_BACKGROUND_COLOR,
               child: CustomScrollView(
                 slivers: [
                   MovieDetallsSliverAppBarView(
                     () => Navigator.pop(context),
-                    movieDetails: bloc.movieDetails,
+                    movieDetails: movieDetails,
                   ),
                   SliverList(
                     delegate: SliverChildListDelegate(
@@ -42,30 +44,39 @@ class MovieDetailsPage extends StatelessWidget {
                           ),
                           child: TralierSectionView(
                             genreList:
-                                bloc.movieDetails?.getGenreListAsStringList() ??
-                                    [],
-                            storyLine: bloc.movieDetails?.overview ?? "",
+                                movieDetails?.getGenreListAsStringList() ?? [],
+                            storyLine: movieDetails?.overview ?? "",
                           ),
                         ),
                         const SizedBox(height: MARGIN_MEDIUM),
-                        ActorsAndCreatorsSectionView(
-                          MOVIE_DETAIL_SCREEN_ACOTRS_TITLE,
-                          "",
-                          seeMoreButtonVisibility: false,
-                          actors: bloc.cast,
+                        Selector<MovieDetailsBloc, List<ActorVO>?>(
+                          selector: (context, bloc) => bloc.cast,
+                          builder: (context, value, child) {
+                            return ActorsAndCreatorsSectionView(
+                              MOVIE_DETAIL_SCREEN_ACOTRS_TITLE,
+                              "",
+                              seeMoreButtonVisibility: false,
+                              actors: value,
+                            );
+                          },
                         ),
                         Container(
                           margin: const EdgeInsets.symmetric(
                               horizontal: MARGIN_MEDIUM_2,
                               vertical: MARGIN_LARGE),
                           child: AboutFilmSectionView(
-                            movieDetails: bloc.movieDetails,
+                            movieDetails: movieDetails,
                           ),
                         ),
-                        ActorsAndCreatorsSectionView(
-                          MOVIE_DETAIL_SCREEN_CREATORS_TITLE,
-                          MOVIE_DETAIL_SCREEN_CREATORS_SEEMORE,
-                          actors: bloc.crew,
+                        Selector<MovieDetailsBloc, List<ActorVO>?>(
+                          selector: (context, bloc) => bloc.crew,
+                          builder: (context, value, child) {
+                            return ActorsAndCreatorsSectionView(
+                              MOVIE_DETAIL_SCREEN_CREATORS_TITLE,
+                              MOVIE_DETAIL_SCREEN_CREATORS_SEEMORE,
+                              actors: value,
+                            );
+                          },
                         )
                       ],
                     ),
