@@ -10,6 +10,7 @@ class MovieDetailsBloc extends ChangeNotifier {
   MovieVO? movieDetails;
   List<ActorVO>? cast;
   List<ActorVO>? crew;
+  List<MovieVO>? relatedMovies;
 
   /// Model
   final MovieModel _movieModel = MovieModelImpl();
@@ -18,6 +19,7 @@ class MovieDetailsBloc extends ChangeNotifier {
     /// Movie Detail
     _movieModel.getMovieDetails(movieId).then((movieDetails) {
       this.movieDetails = movieDetails;
+      getRelatedMovies(movieDetails?.genres?.first.id ?? 0);
       notifyListeners();
     }).catchError((error) => debugPrint(error.toString()));
 
@@ -35,5 +37,12 @@ class MovieDetailsBloc extends ChangeNotifier {
       crew = castAndCrew[1];
       notifyListeners();
     }).catchError((error) => debugPrint(error.toString()));
+  }
+
+  void getRelatedMovies(int genreId) {
+    _movieModel
+        .getMoviesByGenre(genreId)
+        .then((value) => relatedMovies = value);
+    notifyListeners();
   }
 }

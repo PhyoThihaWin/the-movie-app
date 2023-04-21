@@ -15,6 +15,9 @@ class HomeBloc extends ChangeNotifier {
   List<GenreVO>? genres;
   List<ActorVO>? actors;
 
+  /// Page
+  int pageForNowPlayingMovies = 1;
+
   /// Model
   MovieModel movieModel = MovieModelImpl();
 
@@ -28,8 +31,8 @@ class HomeBloc extends ChangeNotifier {
     });
 
     /// Popular Movies From Db
-    movieModel.getNowPlayingMoviesFromDatabase().listen((list) {
-      popularMovies = list.sublist(0, list.length ~/ 2.8);
+    movieModel.getTopRatedMoviesFromDatabase().listen((list) {
+      popularMovies = list.take(5).toList();
       notifyListeners();
     }).onError((error) {
       debugPrint(error.toString());
@@ -87,5 +90,10 @@ class HomeBloc extends ChangeNotifier {
     }).catchError((error) {
       debugPrint(error.toString());
     });
+  }
+
+  void onNowPlayingMovieListEndReached() {
+    pageForNowPlayingMovies += 1;
+    movieModel.getNowPlayingMovies(pageForNowPlayingMovies);
   }
 }
