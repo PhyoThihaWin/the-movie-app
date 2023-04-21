@@ -1,121 +1,140 @@
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
-import 'package:movie_app/data/models/movie_model_impl.dart';
+import 'package:movie_app/blocs/home_bloc.dart';
+import 'package:movie_app/data/vos/actor_vo.dart';
 import 'package:movie_app/data/vos/genre_vo.dart';
 import 'package:movie_app/pages/movie_details_page.dart';
 import 'package:movie_app/widgets/actors_and_creators_section_view.dart';
 import 'package:movie_app/widgets/see_more_text.dart';
 import 'package:movie_app/widgets/title_text_with_see_more_view.dart';
-import 'package:scoped_model/scoped_model.dart';
+import 'package:provider/provider.dart';
 
 import '../data/vos/movie_vo.dart';
 import '../resources/colors.dart';
 import '../resources/dimens.dart';
 import '../resources/strings.dart';
 import '../viewitems/banner_view.dart';
-import '../viewitems/movie_view.dart';
 import '../viewitems/showcase_view.dart';
-import '../widgets/title_text.dart';
+import '../widgets/title_and_horizontal_movie_list_view.dart';
 
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: PRIMARY_COLOR,
-        centerTitle: true,
-        title: const Text(
-          MAIN_SCREEN_APP_BAR_TITLE,
-          style: TextStyle(fontWeight: FontWeight.w700),
-        ),
-        leading: const Icon(Icons.menu),
-        actions: const [
-          Padding(
-            padding: EdgeInsets.only(right: MARGIN_MEDIUM_2),
-            child: Icon(Icons.search),
+    return ChangeNotifierProvider(
+      create: (context) => HomeBloc(),
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: PRIMARY_COLOR,
+          centerTitle: true,
+          title: const Text(
+            MAIN_SCREEN_APP_BAR_TITLE,
+            style: TextStyle(fontWeight: FontWeight.w700),
           ),
-        ],
-      ),
-      body: Container(
-        color: HOME_SCREEN_BACKGROUND_COLOR,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ScopedModelDescendant<MovieModelImpl>(
-                builder: (context, child, model) {
-                  return BannerSectionView(
-                    movieList: model.mPopularMovieList?.take(8).toList(),
-                    onTapMovie: (movieId) =>
-                        _navigateToMovieDetailScreen(context, movieId, model),
-                  );
-                },
-              ),
-              const SizedBox(height: MARGIN_LARGE),
-              ScopedModelDescendant<MovieModelImpl>(
-                builder: (context, child, model) {
-                  return BestPopularMoviesAndSerialsSectionView(
-                    onTapMovie: (movieId) =>
-                        _navigateToMovieDetailScreen(context, movieId, model),
-                    getNowPlayingMovies: model.mNowPlayingMovieList,
-                  );
-                },
-              ),
-              const SizedBox(height: MARGIN_LARGE),
-              const CheckMovieShowtimesView(),
-              const SizedBox(height: MARGIN_LARGE),
-              ScopedModelDescendant<MovieModelImpl>(
-                builder: (context, child, model) {
-                  return GenreSectionView(
-                    onTapMovie: (movieId) =>
-                        _navigateToMovieDetailScreen(context, movieId, model),
-                    genreList: model.mGenreList,
-                    movieList: model.mMoviesByGenreList,
-                    onChooseGenre: (genreId) {
-                      if (genreId != null) {
-                        debugPrint(genreId.toString());
-                        model.getMoviesByGenre(genreId);
-                      }
-                    },
-                  );
-                },
-              ),
-              const SizedBox(height: MARGIN_LARGE),
-              ScopedModelDescendant<MovieModelImpl>(
-                builder: (context, child, model) {
-                  return ShowcasesSection(
-                    topRatedMovies: model.mTopRatedMovieList,
-                    onTapMovie: (movieId) =>
-                        _navigateToMovieDetailScreen(context, movieId, model),
-                  );
-                },
-              ),
-              const SizedBox(height: MARGIN_LARGE),
-              ScopedModelDescendant<MovieModelImpl>(
-                builder: (context, child, model) {
-                  return ActorsAndCreatorsSectionView(
-                      BEST_ACTOR_TITLE, BEST_ACTOR_SEE_MORE,
-                      actors: model.mActors);
-                },
-              ),
-              const SizedBox(height: MARGIN_LARGE)
-            ],
+          leading: const Icon(Icons.menu),
+          actions: const [
+            Padding(
+              padding: EdgeInsets.only(right: MARGIN_MEDIUM_2),
+              child: Icon(Icons.search),
+            ),
+          ],
+        ),
+        body: Container(
+          color: HOME_SCREEN_BACKGROUND_COLOR,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Selector<HomeBloc, List<MovieVO>?>(
+                  selector: (context, bloc) => bloc.popularMovies,
+                  builder: (context, value, child) {
+                    return BannerSectionView(
+                      movieList: value,
+                      onTapMovie: (movieId) =>
+                          _navigateToMovieDetailScreen(context, movieId),
+                    );
+                  },
+                ),
+                const SizedBox(height: MARGIN_LARGE),
+                Selector<HomeBloc, List<MovieVO>?>(
+                  selector: (context, bloc) => bloc.getNowPlayingMovies,
+                  builder: (context, value, child) {
+                    return TitleAndHorizontalMovieListView(
+                      (movieId) =>
+                          _navigateToMovieDetailScreen(context, movieId),
+                      value,
+                      title: MAIN_SCREEN_BEST_POPULAR_MOVIES_AND_SERIALS,
+                      onListEndReached: () {
+                        var bloc =
+                            Provider.of<HomeBloc>(context, listen: false);
+                        bloc.onNowPlayingMovieListEndReached();
+                      },
+                    );
+                  },
+                ),
+                const SizedBox(height: MARGIN_LARGE),
+                const CheckMovieShowtimesView(),
+                const SizedBox(height: MARGIN_LARGE),
+                Selector<HomeBloc, List<GenreVO>?>(
+                  selector: (context, bloc) => bloc.genres,
+                  builder: (context, value, child) {
+                    return Selector<HomeBloc, List<MovieVO>?>(
+                      selector: (context, bloc) => bloc.moviesByGenres,
+                      builder: (context, moviesByGenre, child) {
+                        return GenreSectionView(
+                          onTapMovie: (movieId) =>
+                              _navigateToMovieDetailScreen(context, movieId),
+                          genreList: value,
+                          movieList: moviesByGenre,
+                          onChooseGenre: (genreId) {
+                            if (genreId != null) {
+                              debugPrint(genreId.toString());
+                              HomeBloc bloc =
+                                  Provider.of<HomeBloc>(context, listen: false);
+                              bloc.getMoviesByGenres(genreId);
+                            }
+                          },
+                        );
+                      },
+                    );
+                  },
+                ),
+                const SizedBox(height: MARGIN_LARGE),
+                Selector<HomeBloc, List<MovieVO>?>(
+                  selector: (context, bloc) => bloc.topRatedMovies,
+                  builder: (context, value, child) {
+                    return ShowcasesSection(
+                      topRatedMovies: value,
+                      onTapMovie: (movieId) =>
+                          _navigateToMovieDetailScreen(context, movieId),
+                    );
+                  },
+                ),
+                const SizedBox(height: MARGIN_LARGE),
+                Selector<HomeBloc, List<ActorVO>?>(
+                  selector: (context, bloc) => bloc.actors,
+                  builder: (context, value, child) {
+                    return ActorsAndCreatorsSectionView(
+                        BEST_ACTOR_TITLE, BEST_ACTOR_SEE_MORE,
+                        actors: value);
+                  },
+                ),
+                const SizedBox(height: MARGIN_LARGE)
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  void _navigateToMovieDetailScreen(
-      BuildContext context, int? movieId, MovieModelImpl model) {
+  void _navigateToMovieDetailScreen(BuildContext context, int? movieId) {
     if (movieId != null) {
-      model.getMovieDetailsFromDatabase(movieId);
-      model.getMovieDetails(movieId);
-      model.getCreditsByMovie(movieId);
       Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => MovieDetailsPage(),
+            builder: (context) => MovieDetailsPage(
+              movieId: movieId,
+            ),
           ));
     }
   }
@@ -170,6 +189,7 @@ class GenreSectionView extends StatelessWidget {
           child: HorizontalMovieListView(
             onTapMovie: onTapMovie,
             movieList: movieList,
+            onListEndReached: () {},
           ),
         ),
       ],
@@ -253,59 +273,6 @@ class ShowcasesSection extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class BestPopularMoviesAndSerialsSectionView extends StatelessWidget {
-  final Function(int?) onTapMovie;
-  final List<MovieVO>? getNowPlayingMovies;
-
-  BestPopularMoviesAndSerialsSectionView(
-      {required this.onTapMovie, required this.getNowPlayingMovies});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          margin: const EdgeInsets.only(left: MARGIN_MEDIUM_2),
-          child: TitleText(MAIN_SCREEN_BEST_POPULAR_MOVIES_AND_SERIALS),
-        ),
-        const SizedBox(
-          height: MARGIN_MEDIUM_2,
-        ),
-        HorizontalMovieListView(
-          onTapMovie: onTapMovie,
-          movieList: getNowPlayingMovies,
-        ),
-      ],
-    );
-  }
-}
-
-class HorizontalMovieListView extends StatelessWidget {
-  final Function(int?) onTapMovie;
-  final List<MovieVO>? movieList;
-
-  HorizontalMovieListView({required this.onTapMovie, required this.movieList});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: MOVIE_LIST_HEIGHT,
-      child: movieList?.isNotEmpty ?? false
-          ? ListView.builder(
-              itemCount: movieList?.length ?? 0,
-              padding: const EdgeInsets.only(left: MARGIN_MEDIUM_2),
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                return MovieView(
-                    onTapMovie: onTapMovie, movie: movieList?[index]);
-              },
-            )
-          : const Center(child: CircularProgressIndicator()),
     );
   }
 }
