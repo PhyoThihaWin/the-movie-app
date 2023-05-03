@@ -183,4 +183,15 @@ class MovieVO {
   String toString() {
     return 'MovieVO{adult: $adult, backdropPath: $backdropPath, genreIds: $genreIds, id: $id, originalLanguage: $originalLanguage, originalTitle: $originalTitle, overview: $overview, popularity: $popularity, posterPath: $posterPath, releaseDate: $releaseDate, title: $title, video: $video, voteAverage: $voteAverage, voteCount: $voteCount}';
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is MovieVO &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          title == other.title;
+
+  @override
+  int get hashCode => id.hashCode ^ title.hashCode;
 }

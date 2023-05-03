@@ -4,10 +4,14 @@ import 'package:movie_app/data/vos/genre_vo.dart';
 import 'package:movie_app/data/vos/movie_vo.dart';
 import 'package:movie_app/network/movie_data_agent.dart';
 import 'package:movie_app/network/retrofit_movie_data_agent_impl.dart';
-import 'package:movie_app/persistence/daos/actor_dao.dart';
-import 'package:movie_app/persistence/daos/genre_dao.dart';
-import 'package:movie_app/persistence/daos/movie_dao.dart';
+import 'package:movie_app/persistence/daos/impls/actor_dao_impl.dart';
+import 'package:movie_app/persistence/daos/impls/genre_dao_impl.dart';
+import 'package:movie_app/persistence/daos/impls/movie_dao_impl.dart';
 import 'package:stream_transform/stream_transform.dart';
+
+import '../../persistence/daos/actor_dao.dart';
+import '../../persistence/daos/genre_dao.dart';
+import '../../persistence/daos/movie_dao.dart';
 
 class MovieModelImpl extends MovieModel {
   MovieDataAgent movieDataAgent = RetrofitMovieDataAgentImpl();
@@ -21,9 +25,18 @@ class MovieModelImpl extends MovieModel {
   MovieModelImpl._internal();
 
   /// Daos
-  MovieDao movieDao = MovieDao();
-  GenreDao genreDao = GenreDao();
-  ActorDao actorDao = ActorDao();
+  MovieDao movieDao = MovieDaoImpl();
+  GenreDao genreDao = GenreDaoImpl();
+  ActorDao actorDao = ActorDaoImpl();
+
+  /// for testing purposes
+  void setDaosAndDataAgents(MovieDao movieDao, ActorDao actorDao,
+      GenreDao genreDao, MovieDataAgent dataAgent) {
+    this.movieDao = movieDao;
+    this.genreDao = genreDao;
+    this.actorDao = actorDao;
+    this.movieDataAgent = dataAgent;
+  }
 
   @override
   void getNowPlayingMovies(int page) {
@@ -102,12 +115,12 @@ class MovieModelImpl extends MovieModel {
 
   @override
   Future<List<GenreVO>> getGenresFromDatabase() {
-    return Future.value(genreDao.getAllGenre());
+    return Future.value(genreDao.getAllGenres());
   }
 
   @override
   Future<MovieVO?> getMovieDetailsFromDatabase(int movieId) {
-    return Future.value(movieDao.getSingleMovie(movieId));
+    return Future.value(movieDao.getMovieById(movieId));
   }
 
   @override
@@ -125,7 +138,7 @@ class MovieModelImpl extends MovieModel {
     return movieDao
         .getAllMoviesEventStream()
         .startWith(movieDao.getPopularMoviesStream())
-        .map((event) => movieDao.getPopularMoviesMovies());
+        .map((event) => movieDao.getPopularMovies());
   }
 
   @override
@@ -139,6 +152,6 @@ class MovieModelImpl extends MovieModel {
 
   @override
   Future<List<ActorVO>> getAllActorsFromDatabase() {
-    return Future.value(actorDao.getAllActor());
+    return Future.value(actorDao.getAllActors());
   }
 }

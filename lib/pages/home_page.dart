@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_app/blocs/home_bloc.dart';
@@ -58,6 +60,7 @@ class HomePage extends StatelessWidget {
                 Selector<HomeBloc, List<MovieVO>?>(
                   selector: (context, bloc) => bloc.getNowPlayingMovies,
                   builder: (context, value, child) {
+                    debugPrint("movie ==> "+json.encode(value?.take(3).toList()));
                     return TitleAndHorizontalMovieListView(
                       (movieId) =>
                           _navigateToMovieDetailScreen(context, movieId),
@@ -113,6 +116,7 @@ class HomePage extends StatelessWidget {
                 Selector<HomeBloc, List<ActorVO>?>(
                   selector: (context, bloc) => bloc.actors,
                   builder: (context, value, child) {
+                    debugPrint("actor ==> "+json.encode(value?.take(3).toList()));
                     return ActorsAndCreatorsSectionView(
                         BEST_ACTOR_TITLE, BEST_ACTOR_SEE_MORE,
                         actors: value);
