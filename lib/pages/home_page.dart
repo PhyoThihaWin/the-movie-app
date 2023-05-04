@@ -58,7 +58,7 @@ class HomePage extends StatelessWidget {
                 ),
                 const SizedBox(height: MARGIN_LARGE),
                 Selector<HomeBloc, List<MovieVO>?>(
-                  selector: (context, bloc) => bloc.getNowPlayingMovies,
+                  selector: (context, bloc) => bloc.nowPlayingMovies,
                   builder: (context, value, child) {
                     debugPrint("movie ==> "+json.encode(value?.take(3).toList()));
                     return TitleAndHorizontalMovieListView(

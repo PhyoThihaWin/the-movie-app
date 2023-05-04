@@ -13,9 +13,14 @@ class MovieDetailsBloc extends ChangeNotifier {
   List<MovieVO>? relatedMovies;
 
   /// Model
-  final MovieModel _movieModel = MovieModelImpl();
+  MovieModel _movieModel = MovieModelImpl();
 
-  MovieDetailsBloc(int movieId) {
+  MovieDetailsBloc(int movieId, [MovieModel? mockMovieModel]) {
+    ///
+    if (mockMovieModel != null) {
+      _movieModel = mockMovieModel;
+    }
+
     /// Movie Detail
     _movieModel.getMovieDetails(movieId).then((movieDetails) {
       this.movieDetails = movieDetails;

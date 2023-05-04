@@ -8,7 +8,7 @@ import '../data/vos/movie_vo.dart';
 
 class HomeBloc extends ChangeNotifier {
   /// State variables
-  List<MovieVO>? getNowPlayingMovies;
+  List<MovieVO>? nowPlayingMovies;
   List<MovieVO>? popularMovies;
   List<MovieVO>? topRatedMovies;
   List<MovieVO>? moviesByGenres;
@@ -21,17 +21,22 @@ class HomeBloc extends ChangeNotifier {
   /// Model
   MovieModel movieModel = MovieModelImpl();
 
-  HomeBloc() {
+  HomeBloc([MovieModel? mockMovieModel]) {
+    /// Set Mock MovieModel for Test Data
+    if (mockMovieModel != null) {
+      this.movieModel = mockMovieModel;
+    }
+
     /// Now Playing Movies From Db
     movieModel.getNowPlayingMoviesFromDatabase().listen((list) {
-      getNowPlayingMovies = list;
+      nowPlayingMovies = list;
       notifyListeners();
     }).onError((error) {
       debugPrint(error.toString());
     });
 
     /// Popular Movies From Db
-    movieModel.getTopRatedMoviesFromDatabase().listen((list) {
+    movieModel.getPopularMoviesFromDatabase().listen((list) {
       popularMovies = list.take(5).toList();
       notifyListeners();
     }).onError((error) {
