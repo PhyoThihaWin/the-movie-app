@@ -59,6 +59,10 @@ dev_dependencies:
   retrofit_generator: ^4.1.2
   json_serializable: ^6.6.1
   hive_generator: ^2.0.0
+  integration_test:
+    sdk: flutter
+  flutter_driver:
+    sdk: flutter
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

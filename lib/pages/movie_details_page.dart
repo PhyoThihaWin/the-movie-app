@@ -333,7 +333,6 @@ class MovieTimeAndGenreView extends StatelessWidget {
         ),
         const SizedBox(width: MARGIN_MEDIUM),
         ...genreList.map((genre) => GenreChipView(genre)).toList(),
-        const Spacer(),
         const Icon(
           Icons.favorite_border,
           color: Colors.white,
@@ -388,8 +387,9 @@ class MovieDetallsSliverAppBarView extends StatelessWidget {
         background: Stack(
           children: [
             Positioned.fill(
-              child:
-                  MovieDetailsAppBarImageView(movieDetails?.posterPath ?? ""),
+              child: movieDetails != null
+                  ? MovieDetailsAppBarImageView(movieDetails?.posterPath ?? "")
+                  : Container(),
             ),
             Positioned.fill(
               child: GradientView(),

@@ -48,7 +48,9 @@ class HomeBloc extends ChangeNotifier {
       this.genres = list;
       notifyListeners();
 
-      getMoviesByGenres(genres?.first.id ?? 0);
+      if (genres?.isNotEmpty ?? false) {
+        getMoviesByGenres(genres?.first.id ?? 0);
+      }
     }).catchError((error) {
       debugPrint(error.toString());
     });
@@ -58,7 +60,9 @@ class HomeBloc extends ChangeNotifier {
       this.genres = list;
       notifyListeners();
 
-      getMoviesByGenres(genres?.first.id ?? 0);
+      if (genres?.isNotEmpty ?? false) {
+        getMoviesByGenres(genres?.first.id ?? 0);
+      }
     }).catchError((error) {
       debugPrint(error.toString());
     });

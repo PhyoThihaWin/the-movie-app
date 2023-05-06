@@ -45,9 +45,9 @@ class MovieDetailsBloc extends ChangeNotifier {
   }
 
   void getRelatedMovies(int genreId) {
-    _movieModel
-        .getMoviesByGenre(genreId)
-        .then((value) => relatedMovies = value);
-    notifyListeners();
+    _movieModel.getMoviesByGenre(genreId).then((value) {
+      relatedMovies = value;
+      notifyListeners();
+    }).catchError((error) => debugPrint(error.toString()));
   }
 }
